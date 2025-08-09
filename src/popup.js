@@ -5,6 +5,7 @@ let commentInput;
 let submitButton;
 let postingIndicator;
 // No preview box anymore
+let adStatusEl;
 
 // Load comments for current ad
 function loadComments() {
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     commentInput = document.getElementById('comment-input');
     submitButton = document.getElementById('submit-comment');
     postingIndicator = document.getElementById('posting-indicator');
+    adStatusEl = document.getElementById('ad-status');
 
     if (!commentsList || !commentInput || !submitButton || !postingIndicator) {
         console.error('Failed to find required elements:', {
@@ -71,14 +73,40 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.disabled = !commentInput.value.trim();
     });
     
-    // Get current ad ID from content script
-    chrome.runtime.sendMessage({ action: 'getCurrentAdId' }, response => {
-        console.log('Got response from content script:', response); // Debug log
-        if (response && response.adId) {
-            currentAdId = response.adId;
-            loadComments();
-        }
-    });
+    // Retry logic to fetch ad ID if not immediately available
+    function updateStatus(msg) {
+        if (adStatusEl) adStatusEl.textContent = msg || '';
+    }
+
+    function attemptFetchAdId(remaining) {
+        chrome.runtime.sendMessage({ action: 'getCurrentAdId' }, response => {
+            console.log('AdId response attempt', { remaining, response });
+            if (response && response.adId) {
+                currentAdId = response.adId;
+                updateStatus('Ad detected.');
+                loadComments();
+            } else {
+                // fallback to stored last known id
+                chrome.storage.local.get(['___currentAdId'], store => {
+                    if (!currentAdId && store.___currentAdId) {
+                        currentAdId = store.___currentAdId;
+                        if (currentAdId) {
+                            updateStatus('Ad detected (from cache).');
+                            loadComments();
+                            return;
+                        }
+                    }
+                    if (remaining > 0) {
+                        updateStatus('Detecting ad... (' + remaining + ')');
+                        setTimeout(() => attemptFetchAdId(remaining - 1), 500);
+                    } else {
+                        updateStatus('No ad detected. Open during an ad.');
+                    }
+                });
+            }
+        });
+    }
+    attemptFetchAdId(14); // ~7 seconds total
 
     // Add new comment
     submitButton.addEventListener('click', () => {
@@ -89,10 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // If no ad detected yet, use a fallback bucket so commenting still works
         if (!currentAdId) {
-            currentAdId = 'global_fallback';
-            console.log('Using fallback ID global_fallback');
+            updateStatus('Still detecting ad...');
+            attemptFetchAdId(6);
+            return;
         }
 
     // (Preview removed)

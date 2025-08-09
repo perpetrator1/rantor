@@ -1,51 +1,122 @@
 .container {
-    width: 300px;
-    padding: 15px;
+    width: 400px;
+    padding: 16px;
+    font-family: Roboto, Arial, sans-serif;
 }
 
-#comments-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 15px;
-}
-
-.comment {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
-}
-
-.timestamp {
-    display: block;
-    font-size: 0.8em;
-    color: #666;
-    margin-top: 5px;
+h2 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 24px;
 }
 
 .comment-form {
+    margin-bottom: 32px;
+}
+
+.comment-input-wrapper {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    gap: 16px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.input-container {
+    flex: 1;
 }
 
 #comment-input {
     width: 100%;
-    min-height: 60px;
-    padding: 8px;
-    resize: vertical;
+    min-height: 20px;
+    padding: 8px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    resize: none;
+    font-family: Roboto, Arial, sans-serif;
+    font-size: 14px;
 }
 
-#submit-comment {
-    padding: 8px;
-    background-color: #1a73e8;
+#comment-input:focus {
+    outline: none;
+    border-bottom: 2px solid #065fd4;
+}
+
+.button-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    min-height: 36px;
+}
+
+.submit-button {
+    background-color: #065fd4;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 18px;
+    padding: 0 16px;
+    height: 36px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
+    text-transform: uppercase;
 }
 
-#submit-comment:hover {
-    background-color: #1557b0;
+.submit-button:hover {
+    background-color: #0756bf;
+}
+
+.submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.posting-indicator {
+    color: #606060;
+    font-size: 14px;
+}
+
+.hidden {
+    display: none;
+}
+
+#comments-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.comment {
+    display: flex;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-text {
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.timestamp {
+    font-size: 12px;
+    color: #606060;
+}
+
+/* Empty state */
+.empty-state {
+    padding: 24px 8px;
+    text-align: center;
+    color: #606060;
+    font-size: 14px;
 }
 
 /* Content script styles */

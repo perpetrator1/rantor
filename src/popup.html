@@ -6,12 +6,20 @@
 </head>
 <body>
   <div class="container">
-    <h2>Ad Comments</h2>
-    <div id="comments-list"></div>
+    <h2>Comments</h2>
     <div class="comment-form">
-      <textarea id="comment-input" placeholder="Write your comment..."></textarea>
-      <button id="submit-comment">Post Comment</button>
+      <div class="comment-input-wrapper">
+        <img src="icons/icon48.png" class="user-avatar" alt="User">
+        <div class="input-container">
+          <textarea id="comment-input" placeholder="Add a comment..."></textarea>
+          <div class="button-row">
+            <div id="posting-indicator" class="posting-indicator hidden">Posting...</div>
+            <button id="submit-comment" class="submit-button">Comment</button>
+          </div>
+        </div>
+      </div>
     </div>
+    <div id="comments-list"></div>
   </div>
   <script src="popup.js"></script>
 </body>

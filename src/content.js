@@ -52,7 +52,10 @@ setInterval(detectAd, 1000);
 
 // Listen for messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log('Message received in content script:', request); // Debug log
     if (request.action === 'getCurrentAdId') {
+        console.log('Sending adId:', currentAdId); // Debug log
         sendResponse({ adId: currentAdId });
+        return true; // Required for async response
     }
 });

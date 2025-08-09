@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Ads Commenter",
+  "name": "Rantor",
   "version": "1.0",
   "description": "Add and view comments on YouTube ads",
   "permissions": [
